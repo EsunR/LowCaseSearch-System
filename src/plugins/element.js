@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import {
-  Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Container, Header, Aside, Main, Footer,Dropdown, DropdownMenu, DropdownItem,
+  Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Container, Header, Aside, Main, Footer, Dropdown, DropdownMenu, DropdownItem, Checkbox,
+  CheckboxButton, CheckboxGroup, Tabs, TabPane,
 } from 'element-ui'
 
 Message.install = function (Vue) {
@@ -25,3 +26,8 @@ Vue.use(Footer);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(Checkbox);
+Vue.use(CheckboxButton);
+Vue.use(CheckboxGroup);
+Vue.use(Tabs);
+Vue.use(TabPane);

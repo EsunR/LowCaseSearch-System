@@ -79,11 +79,12 @@ export default {
   .title_box {
     display: flex;
     .title {
-      font-size: 2rem;
+      font-size: 1.9rem;
       line-height: 60px;
       color: white;
       background-color: #409eff;
       padding: 0 40px;
+      font-weight: lighter;
     }
     .identity {
       background-color: #53a8ff;

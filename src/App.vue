@@ -6,8 +6,15 @@
       </el-header>
 
       <el-container class="center">
-        <el-header style="padding: 0px; height: auto; ">
-          <searchbar></searchbar>
+        <el-header class="search">
+          <el-tabs v-model="activeTab" @tab-click="handleClick">
+            <el-tab-pane label="法律法规" name="law">
+              <law-searchbar></law-searchbar>
+            </el-tab-pane>
+            <el-tab-pane label="司法案例" name="case">
+              <case-searchbar></case-searchbar>
+            </el-tab-pane>
+          </el-tabs>
         </el-header>
         <el-container>
           <el-aside width="200px">
@@ -24,13 +31,20 @@
 
 <script>
 import topbar from "./components/subComponents/topbar.vue";
-import searchbar from "./components/subComponents/searchbar.vue";
+import lawSearchbar from "./components/subComponents/law-searchbar.vue";
+import caseSearchbar from "./components/subComponents/case-searchbar.vue";
 import asidebar from "./components/subComponents/asidebar.vue";
 
 export default {
+  data() {
+    return {
+      activeTab: "law"
+    };
+  },
   components: {
     topbar,
-    searchbar,
+    "law-searchbar": lawSearchbar,
+    "case-searchbar": caseSearchbar,
     asidebar
   },
   mounted() {}
@@ -47,6 +61,15 @@ export default {
     width: 1200px;
     margin: 0 auto;
     margin-top: 60px;
+  }
+  .search {
+    height: auto !important;
+    background-color: #fff;
+    margin: 20px 0;
+    padding: 20px 30px;
+    padding-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+    border-radius: 5px;
   }
 }
 </style>
