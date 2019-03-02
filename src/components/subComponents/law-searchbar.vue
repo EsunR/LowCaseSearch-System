@@ -4,7 +4,7 @@
       <el-input placeholder="请输入内容" v-model="content">
         <el-select v-model="from" slot="prepend" placeholder="请选择">
           <el-option label="由标题搜索" value="title"></el-option>
-          <el-option label="由内容搜索" value="article"></el-option>
+          <el-option label="由标题及内容搜索" value="article"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search">搜索</el-button>
       </el-input>
@@ -40,7 +40,7 @@ export default {
   margin-top: 20px;
   .search_box {
     .el-select {
-      width: 120px;
+      width: 160px;
     }
   }
   .checkbox_title {

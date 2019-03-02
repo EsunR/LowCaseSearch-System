@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './components/Home.vue'
+import Law from './components/Law.vue'
+import Case from './components/Case.vue'
 Vue.use(Router)
 
 var router = new Router({
   routes: [
     // path name component
-    { path: '/', redirect: '/home' },
-    { path: '/home', name: 'home', component: Home }
+    { path: '/', redirect: '/law' },
+    { path: '/law', name: 'law', component: Law },
+    { path: '/case', name: 'case', component: Case },
   ]
 })
 

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-header class="topbar" style="padding: 0px;">
+      <el-header class="topbar" style="padding: 0px;   z-index: 999;">
         <topbar></topbar>
       </el-header>
 
@@ -17,12 +17,7 @@
           </el-tabs>
         </el-header>
         <el-container>
-          <el-aside width="200px">
-            <asidebar></asidebar>
-          </el-aside>
-          <el-main>
-            <router-view></router-view>
-          </el-main>
+          <router-view></router-view>
         </el-container>
       </el-container>
     </el-container>
@@ -33,7 +28,6 @@
 import topbar from "./components/subComponents/topbar.vue";
 import lawSearchbar from "./components/subComponents/law-searchbar.vue";
 import caseSearchbar from "./components/subComponents/case-searchbar.vue";
-import asidebar from "./components/subComponents/asidebar.vue";
 
 export default {
   data() {
@@ -44,10 +38,21 @@ export default {
   components: {
     topbar,
     "law-searchbar": lawSearchbar,
-    "case-searchbar": caseSearchbar,
-    asidebar
+    "case-searchbar": caseSearchbar
   },
-  mounted() {}
+  mounted() {},
+  methods: {
+    handleClick(tab) {
+      switch (tab.name) {
+        case "law":
+          this.$router.push("/law");
+          break;
+        case "case":
+          this.$router.push("/case");
+          break;
+      }
+    }
+  }
 };
 </script>
 
