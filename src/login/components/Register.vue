@@ -58,7 +58,7 @@
       </el-form-item>
 
       <el-form-item class="btn_box">
-        <el-button class="btn" type="primary" @click="submitForm('regform')">登录</el-button>
+        <el-button class="btn" type="primary" @click="submitForm('regform')">确定注册</el-button>
         <el-button class="btn" @click="resetForm('regform')">重置</el-button>
       </el-form-item>
 
@@ -155,7 +155,31 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          this.axios
+            .post("commitReg", {
+              account: this.regform.account.toString(),
+              name: this.regform.name,
+              identity: this.regform.identity,
+              phone: this.regform.phone,
+              email: this.regform.email,
+              password: this.regform.pass
+            })
+            .then(res => {
+              if (res.data.code == true) {
+                this.$message({
+                  message: "注册成功，请登录！",
+                  type: "success",
+                  center: true,
+                });
+                this.$router.push({ path: "/login" });
+              } else {
+                this.$message(res.data.msg);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message("未知错误，请重试！");
+            });
         } else {
           console.log("error submit!!");
           return false;

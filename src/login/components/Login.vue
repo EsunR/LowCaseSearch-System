@@ -12,12 +12,12 @@
       hide-required-asterisk
       label-position="top"
     >
-      <el-form-item label="学号/工号" prop="account">
+      <el-form-item label="学号/职工号" prop="account">
         <div class="show_name">{{name}}</div>
         <el-input v-model.number="loginform.account" placeholder="请输入"></el-input>
       </el-form-item>
 
-      <el-form-item label="密码" prop="pass">
+      <el-form-item label="密码" prop="pass" ref="password">
         <el-input type="password" v-model="loginform.pass" autocomplete="off" placeholder="请输入"></el-input>
       </el-form-item>
 
@@ -45,7 +45,7 @@
 <script>
 export default {
   data() {
-    var checkAge = (rule, value, callback) => {
+    var checkAccount = (rule, value, callback) => {
       this.name = "";
       if (!value) {
         return callback(new Error("学号/工号不能为空"));
@@ -57,8 +57,8 @@ export default {
           this.axios
             .get("getName?account=" + value)
             .then(res => {
-              if (res.data) {
-                this.name = res.data;
+              if (res.data.code == 1) {
+                this.name = res.data.data.name;
                 callback();
               } else {
                 callback(new Error("用户不存在"));
@@ -66,6 +66,7 @@ export default {
             })
             .catch(error => {
               console.log(error);
+              this.$message()
             });
         }
       }, 1000);
@@ -77,8 +78,10 @@ export default {
         identity: "student"
       },
       rules: {
-        account: [{ validator: checkAge, trigger: "blur" }],
-        pass: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        account: [{ validator: checkAccount, trigger: "blur" }],
+        pass: [
+          { required: true, message: "请输入密码", trigger: ["blur", "change"] }
+        ]
       },
       options: [
         {
@@ -97,6 +100,9 @@ export default {
       name: ""
     };
   },
+  mounted(){
+    localStorage.clear();
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -104,12 +110,20 @@ export default {
           this.axios
             .post("login", {
               account: this.loginform.account,
-              passWord: this.loginform.pass,
+              password: this.loginform.pass,
               identity: this.loginform.identity
             })
             .then(res => {
-              // 16031210207
-              console.log(res);
+              if (res.data.code == true) {
+                localStorage.setItem("token", res.data.data.token);
+                window.location.href = '/';
+              } else {
+                this.$refs.password.error = "密码错误";
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$refs.password.error = "服务器错误";
             });
         } else {
           return false;
