@@ -5,22 +5,17 @@
         <h1>this is case-aside</h1>
       </el-aside>
       <el-main>
-        <case-main></case-main>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
-import caseMain from "./subComponents/case-main.vue";
-
 
 export default {
   data() {
     return {};
-  },
-  components: {
-    "case-main": caseMain
   }
 };
 </script> 
