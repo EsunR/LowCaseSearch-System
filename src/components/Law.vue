@@ -1,5 +1,5 @@
 <template>
-  <el-container v-loading.fullscreen.lock="loading" element-loading-text="加载数据中">
+  <el-container v-loading="loading" element-loading-text="加载数据中">
     <el-header>
       <law-searchbar v-on:clickSearch="getData"></law-searchbar>
     </el-header>
