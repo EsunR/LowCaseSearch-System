@@ -24,14 +24,15 @@
       </el-col>
       <el-col :span="3" :md="2">
         <div class="grid-content">
-          <el-dropdown>
-            <el-button type="primary">更多
+          <el-dropdown @command="selectDropdwon">
+            <el-button type="primary">
+              更多
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看信息</el-dropdown-item>
-              <el-dropdown-item>修改密码</el-dropdown-item>
-              <el-dropdown-item>用户注销</el-dropdown-item>
+              <el-dropdown-item command="查看信息">查看信息</el-dropdown-item>
+              <el-dropdown-item command="修改密码">修改密码</el-dropdown-item>
+              <el-dropdown-item command="用户注销">用户注销</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -67,6 +68,24 @@ export default {
       .catch(() => {
         window.location.href = "/login.html";
       });
+  },
+  methods: {
+    selectDropdwon(command) {
+      switch (command) {
+        case "用户注销":
+          window.location.href = "/login.html";
+          break;
+        case "查看信息":
+          this.$router.push("/userinfo");
+          break;
+        case "修改密码":
+          this.$router.push("/alterpwd");
+          break;
+        default:
+          console.log("unkonw command: ", command);
+          break;
+      }
+    }
   }
 };
 </script>
@@ -117,7 +136,7 @@ export default {
       border-radius: 3px;
     }
   }
-  .grid-content{
+  .grid-content {
     height: 60px;
     display: flex;
     align-items: center;

@@ -1,162 +1,190 @@
 <template>
-  <el-container>
-    <el-aside width="260px">
-      <el-menu
-        default-active="1"
-        class="el-menu-vertical-demo"
-        :default-openeds="['效力级别','发布部门', '时效性', '法规类别']"
-      >
-        <el-menu-item index="1" @click="all()">
-          <i class="el-icon-tickets"></i>
-          <span slot="title">全部</span>
-        </el-menu-item>
+  <el-container v-loading.fullscreen.lock="loading" element-loading-text="加载数据中">
+    <el-header>
+      <law-searchbar v-on:clickSearch="getData"></law-searchbar>
+    </el-header>
+    <el-container>
+      <el-aside width="260px">
+        <el-menu
+          default-active="1"
+          class="el-menu-vertical-demo"
+          :default-openeds="['效力级别','发布部门', '时效性', '法规类别']"
+          active-text-color="#000000"
+        >
+          <el-menu-item index="1" @click="all()">
+            <i class="el-icon-tickets"></i>
+            <span slot="title">全部</span>
+          </el-menu-item>
 
-        <el-submenu index="效力级别" v-show="level.length != 0">
-          <template slot="title">
-            <i class="el-icon-info"></i>
-            <span>效力级别</span>
-          </template>
-          <el-menu-item-group>
-            <!-- 插入 -->
-            <el-menu-item
-              v-for="item in level"
-              :key="item.title"
-              :index="item.title"
-              @click="itemClick('level', item.title)"
-            >{{item.title}}({{item.count}})</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
+          <el-submenu index="效力级别" v-show="level.length != 0">
+            <template slot="title">
+              <i class="el-icon-info"></i>
+              <span>效力级别</span>
+            </template>
+            <el-menu-item-group>
+              <!-- 插入 -->
+              <el-menu-item
+                v-for="item in level"
+                :key="item.title"
+                :index="item.title"
+                @click="itemClick('level', item.title)"
+              >{{item.title}}({{item.count}})</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
 
-        <el-submenu index="发布部门">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>发布部门</span>
-          </template>
-          <el-menu-item-group>
-            <!-- 插入 -->
-            <el-menu-item
-              v-for="item in department"
-              :key="item.title"
-              :index="item.title"
-              @click="itemClick('department', item.title)"
-            >{{item.title}}({{item.count}})</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
+          <el-submenu index="发布部门">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>发布部门</span>
+            </template>
+            <el-menu-item-group>
+              <!-- 插入 -->
+              <el-menu-item
+                v-for="item in department"
+                :key="item.title"
+                :index="item.title"
+                @click="itemClick('department', item.title)"
+              >{{item.title}}({{item.count}})</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
 
-        <el-submenu index="时效性">
-          <template slot="title">
-            <i class="el-icon-time"></i>
-            <span>时效性</span>
-          </template>
-          <el-menu-item-group>
-            <!-- 插入 -->
-            <el-menu-item
-              v-for="item in time"
-              :key="item.title"
-              :index="item.title"
-              @click="itemClick('time', item.title)"
-            >{{item.title}}({{item.count}})</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
+          <el-submenu index="时效性">
+            <template slot="title">
+              <i class="el-icon-time"></i>
+              <span>时效性</span>
+            </template>
+            <el-menu-item-group>
+              <!-- 插入 -->
+              <el-menu-item
+                v-for="item in time"
+                :key="item.title"
+                :index="item.title"
+                @click="itemClick('time', item.title)"
+                v-show="item.count != 0"
+              >{{item.title}}({{item.count}})</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
 
-        <el-submenu index="法规类别">
-          <template slot="title">
-            <i class="el-icon-menu"></i>
-            <span>法规类别</span>
-          </template>
-          <el-menu-item-group>
-            <!-- 插入 -->
-            <el-menu-item
-              v-for="item in lowSort"
-              :key="item.title"
-              :index="item.title"
-              @click="itemClick('lowSort', item.title)"
-            >{{item.title}}({{item.count}})</el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
-      </el-menu>
-    </el-aside>
-    <el-main>
-      <div class="nav_tag">
-        <el-tag
-          :key="tag"
-          v-for="tag in nav_tag"
-          closable
-          :disable-transitions="false"
-          @close="tagClose(tag)"
-        >{{tag}}</el-tag>
-      </div>
-
-      <div class="card" v-for="(item, i) in list" :key="item.id">
-        <div class="title">
-          <i class="el-icon-document"></i>
-          {{item.title}}
+          <el-submenu index="法规类别">
+            <template slot="title">
+              <i class="el-icon-menu"></i>
+              <span>法规类别</span>
+            </template>
+            <el-menu-item-group>
+              <!-- 插入 -->
+              <el-menu-item
+                v-for="item in lowSort"
+                :key="item.title"
+                :index="item.title"
+                @click="itemClick('lowSort', item.title)"
+              >{{item.title}}({{item.count}})</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <div class="nav_tag">
+          <el-tag type="info" v-if="this.nav_tag.length == 0">全部结果</el-tag>
+          <el-tag
+            :key="i"
+            v-for="(tag,i) in nav_tag"
+            closable
+            :disable-transitions="false"
+            @close="tagClose(tag)"
+          >{{tag}}</el-tag>
+          <el-button
+            type="danger"
+            size="small"
+            plain
+            icon="el-icon-delete"
+            @click="clearTag"
+            v-if="this.nav_tag.length != 0"
+          >清空</el-button>
         </div>
 
-        <div class="summary">
-          <strong>摘要：</strong>
-          {{item.content | getSummary()}}
+        <div class="card" v-for="(item, i) in list" :key="item.id">
+          <div class="title">
+            <i class="el-icon-document"></i>
+            {{item.title}}
+          </div>
+
+          <div class="summary">
+            <strong>摘要：</strong>
+            {{item.content | getSummary()}}
+          </div>
+
+          <div class="info_box">
+            <div class="info">
+              <i class="el-icon-edit"></i> 发文字号:
+              <span>{{item.number}}</span>
+            </div>
+            <div class="info">
+              <i class="el-icon-time"></i> 时效性:
+              <span>
+                {{
+                judgeTime(item.isInvalid, item.isInvalidPart, item.isAlter, item.carryTime)
+                }}
+              </span>
+            </div>
+            <div class="info">
+              <i class="el-icon-date"></i> 发布时间:
+              <span>{{ item.carryTime|dateFormat('YYYY-MM-DD') }}</span>
+            </div>
+          </div>
+
+          <el-collapse>
+            <el-collapse-item title="查看全文" :name="i">
+              <el-card shadow="hover">
+                <el-row :gutter="20">
+                  <el-col :span="12">
+                    <div class="info">
+                      <i class="el-icon-caret-right"></i> 效力级别:
+                      <span>{{item.level}}</span>
+                    </div>
+                    <div class="info">
+                      <i class="el-icon-caret-right"></i> 发布部门:
+                      <span>{{item.department}}</span>
+                    </div>
+                    <div class="info">
+                      <i class="el-icon-caret-right"></i> 法规类别:
+                      <span>{{item.lowSort}}</span>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="12">
+                    <div class="info">
+                      <i class="el-icon-caret-right"></i> 归属类别:
+                      <span>{{item.filter}}</span>
+                    </div>
+                    <div class="info">
+                      <i class="el-icon-caret-right"></i> 实施时间:
+                      <span>{{item.carryTime|dateFormat('YYYY-MM-DD')}}</span>
+                    </div>
+                  </el-col>
+                </el-row>
+              </el-card>
+              <div class="content" v-html="item.content"></div>
+            </el-collapse-item>
+          </el-collapse>
         </div>
 
-        <div class="info_box">
-          <div class="info">
-            <i class="el-icon-edit"></i> 发文字号:
-            <span>{{item.number}}</span>
-          </div>
-          <div class="info">
-            <i class="el-icon-time"></i> 时效性:
-            <span>
-              {{
-              judgeTime(item.isInvalid, item.isInvalidPart, item.isAlter, item.carryTime)
-              }}
-            </span>
-          </div>
-          <div class="info">
-            <i class="el-icon-date"></i> 发布时间:
-            <span>{{ item.carryTime|dateFormat('YYYY-MM-DD') }}</span>
-          </div>
+        <div class="page_box">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :page-count="total_page"
+            @current-change="pageChange"
+            :current-page="$store.state.lawSearch.page"
+          ></el-pagination>
         </div>
-
-        <el-collapse>
-          <el-collapse-item title="查看全文" :name="i">
-            <el-card shadow="hover">
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <div class="info">
-                    <i class="el-icon-caret-right"></i> 效力级别:
-                    <span>{{item.level}}</span>
-                  </div>
-                  <div class="info">
-                    <i class="el-icon-caret-right"></i> 发布部门:
-                    <span>{{item.department}}</span>
-                  </div>
-                  <div class="info">
-                    <i class="el-icon-caret-right"></i> 法规类别:
-                    <span>{{item.lowSort}}</span>
-                  </div>
-                </el-col>
-
-                <el-col :span="12">
-                  <div class="info">
-                    <i class="el-icon-caret-right"></i> 归属类别:
-                    <span>{{item.filter}}</span>
-                  </div>
-                  <div class="info">
-                    <i class="el-icon-caret-right"></i> 实施时间:
-                    <span>{{item.carryTime|dateFormat('YYYY-MM-DD')}}</span>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-            <div class="content" v-html="item.content"></div>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-main>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 
 <script>
+import lawSearchbar from "./subComponents/law-searchbar.vue";
+
 export default {
   data() {
     return {
@@ -165,7 +193,9 @@ export default {
       time: [],
       lowSort: [],
       list: [],
-      nav_tag: ["标签一", "标签二", "标签三"]
+      nav_tag: [],
+      loading: false,
+      total_page: 1
     };
   },
   mounted() {
@@ -176,14 +206,18 @@ export default {
       let obj = {};
       obj[part] = sort;
       this.$store.commit("addLawSearch", obj);
+      this.$store.commit("addLawSearch", { page: 1 });
+      this.getData();
     },
     all() {
       this.$store.commit("clearLawSearchSort");
+      this.$store.commit("addLawSearch", { page: 1 });
+      this.getData();
     },
     judgeTime(isInvalid, isInvalidPart, isAlter, carryTime) {
       if (isInvalid) return "失效";
       if (isInvalidPart) return "部分失效";
-      if (isAlter) return "被修改";
+      if (isAlter) return "已被修改";
       let time;
       Date.parse(new Date()) < carryTime
         ? (time = "尚未生效")
@@ -191,6 +225,9 @@ export default {
       return time;
     },
     getData() {
+      this.loading = true;
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
       this.axios
         .post("/searchLaw", this.$store.state.lawSearch)
         .then(res => {
@@ -200,23 +237,112 @@ export default {
             this.department = res.data.data.bar.department;
             this.time = res.data.data.bar.time;
             this.lowSort = res.data.data.bar.lowSort;
+            this.total_page =
+              parseInt(res.data.data.total / res.data.data.list.length) + 1;
+            // 渲染导航标签
+            this.nav_tag = [];
+            let lawSearch = this.$store.state.lawSearch;
+            for (let key in lawSearch) {
+              switch (key) {
+                case "page":
+                  break;
+                case "search":
+                  break;
+                case "time":
+                  switch (lawSearch.time) {
+                    case 1:
+                      this.nav_tag.push("现行有效");
+                      break;
+                    case 2:
+                      this.nav_tag.push("尚未生效");
+                      break;
+                    case 3:
+                      this.nav_tag.push("失效");
+                      break;
+                    case 4:
+                      this.nav_tag.push("部分失效");
+                      break;
+                    case 5:
+                      this.nav_tag.push("已被修改");
+                      break;
+                  }
+                  break;
+                case "key":
+                  if (lawSearch.key == "") {
+                    this.nav_tag.push("无关键词");
+                  } else {
+                    this.nav_tag.push(lawSearch[key]);
+                  }
+                  break;
+                default:
+                  this.nav_tag.push(lawSearch[key]);
+              }
+            }
+            this.loading = false;
           } else {
+            this.loading = false;
             this.$message(res.data.msg);
           }
         })
         .catch(() => {
+          this.loading = false;
           this.$message("未知错误，无法获取内容，请重试！");
         });
     },
     tagClose(tag) {
+      // 从数据层删除
       this.nav_tag.splice(this.nav_tag.indexOf(tag), 1);
-      console.log(tag);
+      let lawSearch = this.$store.state.lawSearch;
+      // 删除store层中删除
+      for (let key in lawSearch) {
+        // 遍历store中lawSearch的值部分与tag进行对比，如果对比上，就删除
+        if (
+          tag == "现行有效" ||
+          tag == "尚未生效" ||
+          tag == "失效" ||
+          tag == "部分失效" ||
+          tag == "已被修改"
+        ) {
+          this.$store.commit("deleteLawSearch", "time");
+        } else if (tag == "无关键词") {
+          this.$store.commit("deleteLawSearch", "search");
+          this.$store.commit("deleteLawSearch", "key");
+        } else if (lawSearch[key] == tag) {
+          this.$store.commit("deleteLawSearch", key);
+          if (key == "key") {
+            this.$store.commit("deleteLawSearch", "search");
+          }
+        }
+      }
+      this.$store.commit("addLawSearch", { page: 1 });
+      this.getData();
+    },
+    clearTag() {
+      this.nav_tag = [];
+      this.$store.commit("clearAllSearch");
+      this.$store.commit("addLawSearch", { page: 1 });
+      this.getData();
+    },
+    pageChange(page) {
+      this.$store.commit("addLawSearch", { page: page });
+      this.getData();
     }
+  },
+  components: {
+    "law-searchbar": lawSearchbar
   }
 };
 </script> 
 
 <style lang="scss" scoped>
+.el-header {
+  height: auto !important;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+}
 .el-aside {
   .el-menu {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
@@ -234,7 +360,7 @@ export default {
     margin-left: 20px;
     margin-bottom: 20px;
     padding: 20px;
-    .el-tag{
+    .el-tag {
       margin-right: 20px;
     }
   }
@@ -259,9 +385,10 @@ export default {
       font-weight: 600;
     }
     .summary {
-      text-indent: 2em;
       margin-top: 1rem;
       line-height: 1.7;
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 14px;
     }
     .info_box {
       color: rgba(0, 0, 0, 0.5);
@@ -269,6 +396,7 @@ export default {
       line-height: 1.5;
       margin: 1rem 0;
       .info {
+        font-size: 14px;
         margin-right: 2rem !important;
       }
     }
@@ -288,6 +416,12 @@ export default {
       text-indent: 2em;
     }
   }
+  .page_box {
+    display: flex;
+    .el-pagination {
+      margin: 3rem auto;
+    }
+  }
 }
 </style>
 
@@ -302,6 +436,9 @@ export default {
     color: #409eff;
     font-weight: bold;
   }
+}
+.el-menu-item-group__title {
+  display: none !important;
 }
 </style>
 

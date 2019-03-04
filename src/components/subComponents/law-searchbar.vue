@@ -1,36 +1,72 @@
 <template>
   <div id="app">
     <div class="search_box">
-      <el-input placeholder="请输入内容" v-model="content">
-        <el-select v-model="from" slot="prepend" placeholder="请选择">
-          <el-option label="由标题搜索" value="title"></el-option>
-          <el-option label="由标题及内容搜索" value="article"></el-option>
+      <el-input placeholder="请输入内容" v-model="key">
+        <el-select v-model="search" slot="prepend" placeholder="请选择">
+          <el-option label="由标题搜索" value="1"></el-option>
+          <el-option label="由标题及内容搜索" value="2"></el-option>
         </el-select>
-        <el-button slot="append" icon="el-icon-search">搜索</el-button>
+        <el-button slot="append" icon="el-icon-search" @click="getSearch">搜索</el-button>
       </el-input>
     </div>
-
-    <div class="checkbox_title"></div>
-    <el-checkbox-group v-model="checkList">
-      <el-checkbox label="中央法规司法解释"></el-checkbox>
-      <el-checkbox label="外国法律法规"></el-checkbox>
-      <el-checkbox label="地方法规规章"></el-checkbox>
-      <el-checkbox label="立法背景资料"></el-checkbox>
-      <el-checkbox label="中外条约"></el-checkbox>
-      <el-checkbox label="港澳法律法规"></el-checkbox>
-      <el-checkbox label="台湾法律法规"></el-checkbox>
-    </el-checkbox-group>
+    <div class="checkbox_box">
+      <el-checkbox
+        :indeterminate="isIndeterminate"
+        v-model="checkAll"
+        @change="handleCheckAllChange"
+      >全选</el-checkbox>
+      <el-checkbox-group v-model="checkedFilter" @change="changeOption">
+        <el-checkbox v-for="item in filter" :label="item" :key="item">{{item}}</el-checkbox>
+      </el-checkbox-group>
+    </div>
   </div>
 </template>
 
 <script>
+const filterOptions = [
+  "中央法规司法解释",
+  "外国法律法规",
+  "地方法规规章",
+  "立法背景资料",
+  "中外条约",
+  "港澳法律法规",
+  "台湾法律法规"
+];
 export default {
   data() {
     return {
-      content: "",
-      from: "title",
-      checkList: []
+      checkAll: false,
+      isIndeterminate: false,
+      search: "1",
+      key: "",
+      filter: filterOptions,
+      checkedFilter: []
     };
+  },
+  methods: {
+    handleCheckAllChange(val) {
+      this.checkedFilter = val ? filterOptions : [];
+      this.isIndeterminate = false;
+    },
+    changeOption(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.filter.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.filter.length;
+    },
+    getSearch() {
+      let obj = {
+        search: this.search,
+        key: this.key,
+        filter: this.checkedFilter
+      };
+      this.$store.commit("addLawSearch", obj);
+      if (obj.filter == 0) {
+        this.$store.commit("deleteLawSearch", "filter");
+      }
+      this.$emit("clickSearch");
+      this.$store.commit("addLawSearch", { page: 1 });
+    }
   }
 };
 </script>
@@ -43,17 +79,15 @@ export default {
       width: 160px;
     }
   }
-  .checkbox_title {
-    margin-top: 15px;
-    font-size: 20px;
-    padding-left:15px;
-    color: rgba(0, 0, 0, 0.6);
-    padding-bottom: 10px;
-    border-bottom: 2px dashed #eee;
-  }
-  .el-checkbox-group {
-    margin: 20px 0;
-    margin-bottom: 0;
+  .checkbox_box {
+    display: flex;
+    border-top: 2px dashed #eee;
+    margin-top: 20px;
+    .el-checkbox {
+      margin: 20px 0;
+      margin-bottom: 0;
+      margin-right: 30px;
+    }
   }
 }
 </style>

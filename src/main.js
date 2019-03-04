@@ -9,6 +9,9 @@ import moment from 'moment'
 
 Vue.use(VueAxios, axios);
 axios.defaults.baseURL = 'http://47.95.196.58:8080/api/law/';
+// axios.defaults.baseURL = 'http://47.103.2.177:8080/api/law';
+
+
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 // 定义全局的过滤器

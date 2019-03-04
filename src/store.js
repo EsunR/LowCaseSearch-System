@@ -16,7 +16,7 @@ export default new Vuex.Store({
 
     // 搜索相关
     lawSearch: {
-      page: "1"
+      page: 1
     }
   },
   mutations: {
@@ -47,6 +47,25 @@ export default new Vuex.Store({
     // 法律法规的搜索条件 相关
     addLawSearch(state, obj) {
       for (let key in obj) {
+        if (key == "time") {
+          switch (obj.time) {
+            case "现行有效":
+              obj.time = 1;
+              break;
+            case "尚未生效":
+              obj.time = 2;
+              break;
+            case "失效":
+              obj.time = 3;
+              break;
+            case "部分失效":
+              obj.time = 4;
+              break;
+            case "已被修改":
+              obj.time = 5;
+              break;
+          }
+        }
         state.lawSearch[key] = obj[key]
       }
     },
@@ -56,8 +75,11 @@ export default new Vuex.Store({
       delete state.lawSearch.time;
       delete state.lawSearch.lowSort;
     },
-    deleteLawSearch(state, condition){
+    deleteLawSearch(state, condition) {
       delete state.lawSearch[condition];
+    },
+    clearAllSearch(state){
+      state.lawSearch = {};
     }
 
   },

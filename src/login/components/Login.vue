@@ -66,7 +66,7 @@ export default {
             })
             .catch(error => {
               console.log(error);
-              this.$message()
+              this.$message("暂时无法连接服务器，请稍候重试。")
             });
         }
       }, 1000);

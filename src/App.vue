@@ -8,12 +8,8 @@
       <el-container class="center">
         <el-header class="search">
           <el-tabs v-model="activeTab" @tab-click="handleClick">
-            <el-tab-pane label="法律法规" name="law">
-              <law-searchbar></law-searchbar>
-            </el-tab-pane>
-            <el-tab-pane label="司法案例" name="case">
-              <case-searchbar></case-searchbar>
-            </el-tab-pane>
+            <el-tab-pane label="法律法规" name="law"></el-tab-pane>
+            <el-tab-pane label="司法案例" name="case"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -26,8 +22,6 @@
 
 <script>
 import topbar from "./components/subComponents/topbar.vue";
-import lawSearchbar from "./components/subComponents/law-searchbar.vue";
-import caseSearchbar from "./components/subComponents/case-searchbar.vue";
 
 export default {
   data() {
@@ -36,9 +30,7 @@ export default {
     };
   },
   components: {
-    topbar,
-    "law-searchbar": lawSearchbar,
-    "case-searchbar": caseSearchbar
+    topbar
   },
   mounted() {},
   methods: {
