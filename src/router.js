@@ -5,6 +5,11 @@ import Case from './components/Case.vue'
 import UserInfo from './components/UserInfo.vue'
 import Nofound from './components/NoFound.vue'
 import AlterPwd from './components/AlterPwd.vue'
+import Feedback from './components/Feedback.vue'
+import CommitLaw from './components/teacher/CommitLaw.vue'
+import CommitCase from './components/teacher/CommitCase.vue'
+
+
 
 
 
@@ -13,7 +18,7 @@ Vue.use(Router)
 var router = new Router({
   routes: [
     // path name component
-    { path: '*', name:'nofound', component: Nofound},
+    { path: '*', name: 'nofound', component: Nofound },
     { path: '/', redirect: '/law' },
     {
       path: '/law',
@@ -23,6 +28,9 @@ var router = new Router({
     { path: '/case', name: 'case', component: Case },
     { path: '/userinfo', name: 'userinfo', component: UserInfo },
     { path: '/alterpwd', name: 'alterpwd', component: AlterPwd },
+    { path: '/commitlaw', name: 'commitlaw', component: CommitLaw },
+    { path: '/commitcase', name: 'commitcase', component: CommitCase },
+    { path: '/feedback', name: 'feedback', component: Feedback },
   ]
 })
 

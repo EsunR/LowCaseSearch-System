@@ -1,5 +1,5 @@
 <template>
-  <el-container v-loading="loading" element-loading-text="加载数据中">
+  <el-container v-loading.fullscreen.lock="loading" element-loading-text="加载数据中">
     <el-header>
       <law-searchbar v-on:clickSearch="getData"></law-searchbar>
     </el-header>
@@ -195,7 +195,8 @@ export default {
       list: [],
       nav_tag: [],
       loading: false,
-      total_page: 1
+      total_page: 1,
+      page_list: 14 // 每页展示的数据条数
     };
   },
   mounted() {
@@ -237,8 +238,15 @@ export default {
             this.department = res.data.data.bar.department;
             this.time = res.data.data.bar.time;
             this.lowSort = res.data.data.bar.lowSort;
-            this.total_page =
-              parseInt(res.data.data.total / res.data.data.list.length) + 1;
+            let total = res.data.data.total;
+            let list = this.page_list;
+            if (total < list) {
+              this.total_page = 1;
+            } else {
+              total % list == 0
+                ? (this.total_page = total / list)
+                : (this.total_page = parseInt(total / list) + 1);
+            }
             // 渲染导航标签
             this.nav_tag = [];
             let lawSearch = this.$store.state.lawSearch;

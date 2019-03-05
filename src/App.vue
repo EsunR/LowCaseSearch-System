@@ -6,10 +6,12 @@
       </el-header>
 
       <el-container class="center">
-        <el-header class="search">
+        <el-header class="search" v-show="flag">
           <el-tabs v-model="activeTab" @tab-click="handleClick">
             <el-tab-pane label="法律法规" name="law"></el-tab-pane>
             <el-tab-pane label="司法案例" name="case"></el-tab-pane>
+            <el-tab-pane label="法律法规上传" name="commitlaw"></el-tab-pane>
+            <el-tab-pane label="司法案例上传" name="commitcase"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -28,13 +30,16 @@ import topbar from "./components/subComponents/topbar.vue";
 export default {
   data() {
     return {
-      activeTab: "law"
+      activeTab: "law",
+      flag: true
     };
   },
   components: {
     topbar
   },
-  mounted() {},
+  mounted() {
+    this.chagePaht();
+  },
   methods: {
     handleClick(tab) {
       switch (tab.name) {
@@ -44,7 +49,42 @@ export default {
         case "case":
           this.$router.push("/case");
           break;
+        case "commitlaw":
+          this.$router.push("/commitlaw");
+          break;
+        case "commitcase":
+          this.$router.push("/commitcase");
+          break;
       }
+    },
+    chagePaht() {
+      let path = this.$route.path;
+      switch (path) {
+        case "/law":
+          this.flag = true;
+          this.activeTab = "law";
+          break;
+        case "/case":
+          this.flag = true;
+          this.activeTab = "case";
+          break;
+        case "/commitlaw":
+          this.flag = true;
+          this.activeTab = "commitlaw";
+          break;
+        case "/commitcase":
+          this.flag = true;
+          this.activeTab = "commitcase";
+          break;
+        default:
+          this.flag = false;
+          break;
+      }
+    }
+  },
+  watch: {
+    $route() {
+      this.chagePaht();
     }
   }
 };

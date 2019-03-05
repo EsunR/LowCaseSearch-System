@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import {
   Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Container, Header, Aside, Main, Footer, Dropdown, DropdownMenu, DropdownItem, Checkbox,
-  CheckboxButton, CheckboxGroup, Tabs, TabPane, Menu, Submenu, MenuItem, MenuItemGroup, Collapse, CollapseItem, Card, Tag, Loading, Pagination 
+  CheckboxButton, CheckboxGroup, Tabs, TabPane, Menu, Submenu, MenuItem, MenuItemGroup, Collapse, CollapseItem, Card, Tag, Loading, Pagination, DatePicker, MessageBox
 } from 'element-ui'
 
 Message.install = function (Vue) {
-  Vue.prototype.$message = Message
+  Vue.prototype.$message = Message;
+}
+MessageBox.install = function (Vue) {
+  Vue.prototype.$confirm = MessageBox.confirm;
 }
 
 
@@ -41,3 +44,5 @@ Vue.use(Card);
 Vue.use(Tag);
 Vue.use(Loading);
 Vue.use(Pagination);
+Vue.use(DatePicker);
+Vue.use(MessageBox);

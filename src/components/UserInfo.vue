@@ -1,5 +1,6 @@
 <template>
   <div id="user_info">
+    <h1>用户信息</h1>
     <el-row type="flex">
       <el-col :span="8" class="left">
         <div class="title">用 户 身 份</div>
@@ -40,7 +41,7 @@
         <el-button type="danger">修改密码</el-button>
       </router-link>
       <router-link class="link" to="/">
-        <el-button type="info">返回主页</el-button>
+        <el-button>返回主页</el-button>
       </router-link>
     </div>
   </div>
@@ -69,6 +70,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   border-radius: 5px;
   padding: 40px 150px;
+  margin-top: 40px;
   .left {
     margin-right: 40px;
     background-color: #545c64;

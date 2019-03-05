@@ -1,5 +1,6 @@
 <template>
   <div id="alter_pwd">
+    <h1>修改密码</h1>
     <el-form
       :model="ruleForm2"
       status-icon
@@ -109,6 +110,7 @@ export default {
 
 <style lang="scss" scoped>
 #alter_pwd {
+  margin-top: 40px;
   width: 100%;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);

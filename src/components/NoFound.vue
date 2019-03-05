@@ -8,6 +8,7 @@
 
 <style lang="scss" scoped>
 .app {
+  margin-top: 40px;
   background-color: #fff;
   width: 100%;
   padding: 20px;
