@@ -226,11 +226,11 @@ export default {
                 procedure: data.procedure,
                 courtLevel: data.courtLevel,
                 instrument: data.instrument,
-                closingTime: parseInt(data.closingTime / 1000).toString(),
+                closingTime: parseInt(data.closingTime).toString(),
                 topic: data.topic
               },
               content: this.content,
-              commitTime: (Date.parse(new Date()) / 1000).toString()
+              commitTime: (Date.parse(new Date())).toString()
             };
             this.$confirm("您确定要上传该司法案例吗?", "提示", {
               confirmButtonText: "确定",
