@@ -10,8 +10,7 @@
           <el-tabs v-model="activeTab" @tab-click="handleClick">
             <el-tab-pane label="法律法规" name="law"></el-tab-pane>
             <el-tab-pane label="司法案例" name="case"></el-tab-pane>
-            <el-tab-pane label="法律法规上传" name="commitlaw"></el-tab-pane>
-            <el-tab-pane label="司法案例上传" name="commitcase"></el-tab-pane>
+            <el-tab-pane v-if="identity == 'teacher'" label="司法案例上传" name="commitcase"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -31,7 +30,8 @@ export default {
   data() {
     return {
       activeTab: "law",
-      flag: true
+      flag: true,
+      identity: ""
     };
   },
   components: {
@@ -39,6 +39,7 @@ export default {
   },
   mounted() {
     this.chagePaht();
+    this.checkIdentity()
   },
   methods: {
     handleClick(tab) {
@@ -68,10 +69,6 @@ export default {
           this.flag = true;
           this.activeTab = "case";
           break;
-        case "/commitlaw":
-          this.flag = true;
-          this.activeTab = "commitlaw";
-          break;
         case "/commitcase":
           this.flag = true;
           this.activeTab = "commitcase";
@@ -80,6 +77,16 @@ export default {
           this.flag = false;
           break;
       }
+    },
+    checkIdentity() {
+      this.axios.get("/getUserInfo").then(res=>{
+        if(res.data.code == 1){
+          this.identity = res.data.data.identity;
+        }
+      }).catch((err)=>{
+        console.log(err);
+        this.$message("读取服务器信息失败，请重新刷新页面")
+      })
     }
   },
   watch: {

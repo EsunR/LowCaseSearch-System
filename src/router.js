@@ -6,7 +6,6 @@ import UserInfo from './components/UserInfo.vue'
 import Nofound from './components/NoFound.vue'
 import AlterPwd from './components/AlterPwd.vue'
 import Feedback from './components/Feedback.vue'
-import CommitLaw from './components/teacher/CommitLaw.vue'
 import CommitCase from './components/teacher/CommitCase.vue'
 
 
@@ -28,7 +27,6 @@ var router = new Router({
     { path: '/case', name: 'case', component: Case },
     { path: '/userinfo', name: 'userinfo', component: UserInfo },
     { path: '/alterpwd', name: 'alterpwd', component: AlterPwd },
-    { path: '/commitlaw', name: 'commitlaw', component: CommitLaw },
     { path: '/commitcase', name: 'commitcase', component: CommitCase },
     { path: '/feedback', name: 'feedback', component: Feedback },
   ]

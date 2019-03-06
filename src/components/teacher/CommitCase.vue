@@ -6,34 +6,35 @@
       ref="ruleForm"
       label-width="120px"
       label-position="right"
+      v-if="identity == 'teacher'"
     >
-      <el-form-item label="所属板块" prop="section" required>
+      <el-form-item label="所属板块" prop="section">
         <el-select v-model="ruleForm.section" placeholder="请选择">
           <el-option label v-for="item in option.section" :key="item" :value="item"></el-option>
         </el-select>
       </el-form-item>
 
-      <el-form-item label="案例标题" prop="title" required>
+      <el-form-item label="案例标题" prop="title">
         <el-input v-model="ruleForm.title" style="width: 977px"></el-input>
       </el-form-item>
 
       <el-row>
         <el-col :span="8">
-          <el-form-item label="案由" prop="brief" required>
+          <el-form-item label="案由" prop="brief">
             <el-select v-model="ruleForm.brief" placeholder="请选择">
               <el-option label v-for="item in option.brief" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="案例级别" prop="caseLevel" required>
+          <el-form-item label="案例级别" prop="caseLevel">
             <el-select v-model="ruleForm.caseLevel" placeholder="请选择">
               <el-option label v-for="item in option.caseLevel" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="案例审理法院" prop="court" required>
+          <el-form-item label="案例审理法院" prop="court">
             <el-select v-model="ruleForm.court" placeholder="请选择">
               <el-option label v-for="item in option.court" :key="item" :value="item"></el-option>
             </el-select>
@@ -41,24 +42,37 @@
         </el-col>
       </el-row>
 
+      <!-- 以下为动态判断项 -->
       <el-row>
         <el-col :span="8">
-          <el-form-item label="审理程序" prop="procedure" required>
-            <el-select v-model="ruleForm.procedure" placeholder="请选择">
+          <el-form-item label="审理程序" prop="procedure">
+            <el-select
+              v-model="ruleForm.procedure"
+              placeholder="请选择"
+              :disabled="disabled.procedure"
+            >
               <el-option label v-for="item in option.procedure" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="法院级别" prop="courtLevel" required>
-            <el-select v-model="ruleForm.courtLevel" placeholder="请选择">
+          <el-form-item label="法院级别" prop="courtLevel">
+            <el-select
+              v-model="ruleForm.courtLevel"
+              placeholder="请选择"
+              :disabled="disabled.courtLevel"
+            >
               <el-option label v-for="item in option.courtLevel" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="文书类型" prop="instrument" required>
-            <el-select v-model="ruleForm.instrument" placeholder="请选择">
+          <el-form-item label="文书类型" prop="instrument">
+            <el-select
+              v-model="ruleForm.instrument"
+              placeholder="请选择"
+              :disabled="disabled.instrument"
+            >
               <el-option label v-for="item in option.instrument" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
@@ -67,18 +81,19 @@
 
       <el-row>
         <el-col :span="8">
-          <el-form-item label="审结时间" prop="closingTime" required>
+          <el-form-item label="审结时间" prop="closingTime">
             <el-date-picker
               v-model="ruleForm.closingTime"
               type="date"
               value-format="timestamp"
               placeholder="选择日期"
+              :disabled="disabled.closingTime"
             ></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="案例专题" prop="topic" required>
-            <el-select v-model="ruleForm.topic" placeholder="请选择">
+          <el-form-item label="案例专题" prop="topic">
+            <el-select v-model="ruleForm.topic" placeholder="请选择" :disabled="disabled.topic">
               <el-option label v-for="item in option.topic" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
@@ -97,6 +112,7 @@
         </router-link>
       </div>
     </el-form>
+    <h1 v-if="identity != 'teacher'">您无权访问该内容</h1>
   </div>
 </template>
 
@@ -123,32 +139,23 @@ export default {
       },
       rule: {
         section: [
-          { required: true, message: "请选择相应选项", trigger: "blur" }
+          { required: true, message: "请选择相应选项", trigger: "change" }
         ],
-        title: [{ required: true, message: "请填写标题", trigger: "blur" }],
-        brief: [{ required: true, message: "请选择相应选项", trigger: "blur" }],
+        title: [{ required: true, message: "请填写标题", trigger: "change" }],
+        brief: [
+          { required: true, message: "请选择相应选项", trigger: "change" }
+        ],
         caseLevel: [
-          { required: true, message: "请选择相应选项", trigger: "blur" }
+          { required: true, message: "请选择相应选项", trigger: "change" }
         ],
-        court: [{ required: true, message: "请选择相应选项", trigger: "blur" }],
-        procedure: [
-          { required: true, message: "请选择相应选项", trigger: "blur" }
+        court: [
+          { required: true, message: "请选择相应选项", trigger: "change" }
         ],
-        courtLevel: [
-          { required: true, message: "请选择相应选项", trigger: "blur" }
-        ],
-        instrument: [
-          { required: true, message: "请选择相应选项", trigger: "blur" }
-        ],
-        closingTime: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change"
-          }
-        ],
-        topic: [{ required: true, message: "请选择相应选项", trigger: "blur" }]
+        procedure: [],
+        courtLevel: [],
+        instrument: [],
+        closingTime: [],
+        topic: []
       },
       option: {
         section: [],
@@ -159,7 +166,15 @@ export default {
         courtLevel: [],
         instrument: [],
         topic: []
-      }
+      },
+      disabled: {
+        procedure: true, //审理程序筛选
+        courtLevel: true, //法院级别筛选
+        instrument: true, //文书类型
+        closingTime: true,
+        topic: true
+      },
+      identity: ""
     };
   },
   mounted() {
@@ -176,11 +191,10 @@ export default {
       "list",
       "justify"
     ];
-    if (this.$refs.editor2.innerHTML == "") {
-      editor.create();
-    }
+    editor.create();
     // 动态生成下拉菜单
     this.getOption();
+    this.checkIdentity();
   },
   methods: {
     getOption() {
@@ -265,14 +279,109 @@ export default {
           return;
         }
       });
+    },
+    inintOptions() {
+      // 重置验证规则
+      this.rule.procedure = [];
+      this.rule.courtLevel = [];
+      this.rule.instrument = [];
+      this.rule.closingTime = [];
+      this.rule.topic = [];
+
+      // 重置数据
+      this.ruleForm.procedure = ""; //审理程序筛选
+      this.ruleForm.courtLevel = ""; //法院级别筛选
+      this.ruleForm.instrument = ""; //文书类型
+      this.ruleForm.closingTime = "";
+      this.ruleForm.topic = "";
+
+      // 重置禁用项
+      this.disabled = {
+        procedure: true, //审理程序筛选
+        courtLevel: true, //法院级别筛选
+        instrument: true, //文书类型
+        closingTime: true,
+        topic: true
+      };
+    },
+    checkIdentity() {
+      this.axios
+        .get("/getUserInfo")
+        .then(res => {
+          if (res.data.code == 1) {
+            console.log(res.data.data.identity);
+            this.identity = res.data.data.identity;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message("读取服务器信息失败，请重新刷新页面");
+        });
     }
   },
   watch: {
-    ruleForm: {
-      handler(val) {
-        console.log(this.ruleForm.section);
-      },
-      deep: true
+    "ruleForm.section": function(val) {
+      switch (val) {
+        case "案例与裁判文书":
+          this.inintOptions();
+          this.disabled.procedure = false;
+          this.disabled.courtLevel = false;
+          this.disabled.instrument = false;
+          this.rule.procedure = [
+            { required: true, message: "请选择相应选项", trigger: "change" }
+          ];
+          this.rule.courtLevel = [
+            { required: true, message: "请选择相应选项", trigger: "change" }
+          ];
+          this.rule.instrument = [
+            { required: true, message: "请选择相应选项", trigger: "change" }
+          ];
+          break;
+        case "公报案例":
+          this.inintOptions();
+          this.disabled.procedure = false;
+          this.disabled.courtLevel = false;
+          this.disabled.closingTime = false;
+          this.rule.procedure = [
+            { required: true, message: "请选择相应选项", trigger: "change" }
+          ];
+          this.rule.courtLevel = [
+            { required: true, message: "请选择相应选项", trigger: "change" }
+          ];
+          this.rule.closingTime = [
+            {
+              type: "date",
+              required: true,
+              message: "请选择日期",
+              trigger: "change"
+            }
+          ];
+          break;
+        case "案例要旨":
+          this.inintOptions();
+          this.disabled.procedure = false;
+          this.disabled.courtLevel = false;
+          this.disabled.instrument = false;
+          this.rule.procedure = [
+            { required: true, message: "请选择相应选项", trigger: "blur" }
+          ];
+          this.rule.courtLevel = [
+            { required: true, message: "请选择相应选项", trigger: "blur" }
+          ];
+          this.rule.instrument = [
+            { required: true, message: "请选择相应选项", trigger: "blur" }
+          ];
+          break;
+        case "案例报道":
+          this.inintOptions();
+          this.disabled.topic = false;
+          this.rule.topic = [
+            { required: true, message: "请选择相应选项", trigger: "blur" }
+          ];
+        default:
+          console.log("default");
+          break;
+      }
     }
   }
 };
