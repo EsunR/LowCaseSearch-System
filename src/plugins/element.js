@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import {
   Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Container, Header, Aside, Main, Footer, Dropdown, DropdownMenu, DropdownItem, Checkbox,
-  CheckboxButton, CheckboxGroup, Tabs, TabPane, Menu, Submenu, MenuItem, MenuItemGroup, Collapse, CollapseItem, Card, Tag, Loading, Pagination, DatePicker, MessageBox
+  CheckboxButton, CheckboxGroup, Tabs, TabPane, Menu, Submenu, MenuItem, MenuItemGroup, Collapse, CollapseItem, Card, Tag, Loading, Pagination, DatePicker, MessageBox, Radio, RadioGroup
 } from 'element-ui'
 
 Message.install = function (Vue) {
@@ -46,3 +46,5 @@ Vue.use(Loading);
 Vue.use(Pagination);
 Vue.use(DatePicker);
 Vue.use(MessageBox);
+Vue.use(Radio);
+Vue.use(RadioGroup);

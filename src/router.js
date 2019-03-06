@@ -7,6 +7,8 @@ import Nofound from './components/NoFound.vue'
 import AlterPwd from './components/AlterPwd.vue'
 import Feedback from './components/Feedback.vue'
 import CommitCase from './components/teacher/CommitCase.vue'
+import CaseDetail from './components/CaseDetail.vue'
+
 
 
 
@@ -29,6 +31,7 @@ var router = new Router({
     { path: '/alterpwd', name: 'alterpwd', component: AlterPwd },
     { path: '/commitcase', name: 'commitcase', component: CommitCase },
     { path: '/feedback', name: 'feedback', component: Feedback },
+    { path: '/casedetail/:caseid', name:'casedetail', component:  CaseDetail}
   ]
 })
 

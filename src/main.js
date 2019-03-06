@@ -16,7 +16,7 @@ axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
 
 // 定义全局的过滤器
 Vue.filter('dateFormat', function (dataStr, pattern = "YYYY-MM-DD HH:mm:ss") {
-  return moment(dataStr).format(pattern);
+  return moment(parseInt(dataStr)).format(pattern);
 })
 Vue.filter('getSummary', function (text) {
   if (text.slice(0, 3) == "<p>") {

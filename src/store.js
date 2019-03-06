@@ -14,9 +14,17 @@ export default new Vuex.Store({
     phone: "",
     loginCount: "",
 
-    // 搜索相关
+    // 法律法规搜索相关
     lawSearch: {
       page: 1
+    },
+
+    // 司法案例搜索相关
+    caseSearch: {
+      page: 1,
+      section: "案例与裁判文书",
+      sort: {},
+      tag: {}
     }
   },
   mutations: {
@@ -78,9 +86,59 @@ export default new Vuex.Store({
     deleteLawSearch(state, condition) {
       delete state.lawSearch[condition];
     },
-    clearAllSearch(state){
+    clearAllSearch(state) {
       state.lawSearch = {};
+    },
+
+
+
+    // 法律法规的搜索条件 相关
+    addCaseSearchSort(state, obj) {
+      for (let key in obj) {
+        state.caseSearch.sort[key] = obj[key]
+      }
+    },
+    addCaseSearchTag(state, obj) {
+      for (let key in obj) {
+        state.caseSearch.tag[key] = obj[key]
+      }
+    },
+    addCaseSearch(state, obj) {
+      for (let key in obj) {
+        state.caseSearch[key] = obj[key]
+      }
+    },
+    clearCaseSearchSort(state) {
+      state.caseSearch.sort = {};
+    },
+    clearCaseSearchTag(state){
+      state.caseSearch.tag = {};
+    },
+    deleteCaseSearch(state, condition){
+      for(let key in state.caseSearch){
+        if(key == condition){
+          delete state.caseSearch[condition];
+          return;
+        }
+      }
+      for(let key in state.caseSearch.sort){
+        if(key == condition){
+          delete state.caseSearch.sort[condition];
+          return;
+        }
+      }
+      for(let key in state.caseSearch.tag){
+        if(key == condition){
+          delete state.caseSearch.tag[condition];
+          return;
+        }
+      }
+    },
+    changeSection(state, section){
+      state.caseSearch.section = section;
+      state.caseSearch.tag = {};
     }
+
 
   },
   actions: {

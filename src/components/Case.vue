@@ -1,14 +1,141 @@
 <template>
-  <el-container v-loading="loading" element-loading-text="加载数据中">
+  <el-container v-loading="loading" element-loading-text="加载数据中" id="case">
     <el-header>
-      <law-searchbar v-on:clickSearch="getData"></law-searchbar>
+      <div class="search_box">
+        <el-input placeholder="请输入内容" v-model="key">
+          <el-select v-model="select" slot="prepend" placeholder="请选择">
+            <el-option label="由标题搜索" value="title"></el-option>
+            <el-option label="由标题及内容搜索" value="article"></el-option>
+          </el-select>
+          <el-button @click="search" slot="append" icon="el-icon-search">搜索</el-button>
+        </el-input>
+        <el-tabs v-model="selectSection" @tab-click="changeSection">
+          <el-tab-pane label="案例与裁判文书" name="案例与裁判文书">
+            <el-form :model="form1" label-width="80px" label-position="left">
+              <el-form-item label="审理程序">
+                <el-radio-group v-model="form1.procedure">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.procedure" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="法院级别">
+                <el-radio-group v-model="form1.courtLevel">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.courtLevel" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="文书">
+                <el-radio-group v-model="form1.instrument">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.instrument" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-button type="primary" @click="submitForm('form1')">筛选</el-button>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane label="公报案例" name="公报案例">
+            <el-form :model="form2" label-width="80px" label-position="left">
+              <el-form-item label="审理程序">
+                <el-radio-group v-model="form2.procedure">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.procedure" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="法院级别">
+                <el-radio-group v-model="form2.courtLevel">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.courtLevel" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="审结日期">
+                <el-radio-group v-model="form2.closingTime" style="margin-right: 30px;">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio label="一月内"></el-radio>
+                  <el-radio label="三月内"></el-radio>
+                  <el-radio label="半年内"></el-radio>
+                  <el-radio label="一年内"></el-radio>
+                  <el-radio label="其他"></el-radio>
+                </el-radio-group>
+                <el-date-picker
+                  value-format="timestamp"
+                  v-model="closingTime_status.value"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :disabled="closingTime_status.disabled"
+                ></el-date-picker>
+              </el-form-item>
+              <el-button type="primary" @click="submitForm('form2')">筛选</el-button>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane label="案例要旨" name="案例要旨">
+            <el-form :model="form3" label-width="80px" label-position="left">
+              <el-form-item label="审理程序">
+                <el-radio-group v-model="form3.procedure">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.procedure" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="法院级别">
+                <el-radio-group v-model="form3.courtLevel">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.courtLevel" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="文书">
+                <el-radio-group v-model="form3.instrument">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.instrument" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-button type="primary" @click="submitForm('form3')">筛选</el-button>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane label="案例报道" name="案例报道">
+            <el-form :model="form4" label-width="80px" label-position="left">
+              <el-form-item label="案例专题">
+                <el-radio-group v-model="form4.topic">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio v-for="item in option.topic" :key="item" :label="item"></el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="发布日期">
+                <el-radio-group v-model="form4.commitTime" style="margin-right: 30px;">
+                  <el-radio label="全部"></el-radio>
+                  <el-radio label="一月内"></el-radio>
+                  <el-radio label="三月内"></el-radio>
+                  <el-radio label="半年内"></el-radio>
+                  <el-radio label="一年内"></el-radio>
+                  <el-radio label="其他"></el-radio>
+                </el-radio-group>
+                <el-date-picker
+                  value-format="timestamp"
+                  v-model="commitTime_status.value"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :disabled="commitTime_status.disabled"
+                ></el-date-picker>
+              </el-form-item>
+              <el-button type="primary" @click="submitForm('form4')">筛选</el-button>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </el-header>
     <el-container>
       <el-aside width="260px">
         <el-menu
           default-active="1"
-          class="el-menu-vertical-demo"
-          :default-openeds="['效力级别','发布部门', '时效性', '法规类别']"
+          :default-openeds="['案由','案例级别', '案例审理法院']"
           active-text-color="#000000"
         >
           <el-menu-item index="1" @click="all()">
@@ -16,67 +143,50 @@
             <span slot="title">全部</span>
           </el-menu-item>
 
-          <el-submenu index="效力级别" v-show="level.length != 0">
+          <el-submenu index="案由">
             <template slot="title">
               <i class="el-icon-info"></i>
-              <span>效力级别</span>
+              <span>案由</span>
             </template>
             <el-menu-item-group>
               <!-- 插入 -->
               <el-menu-item
-                v-for="item in level"
+                v-for="item in data.side.brief"
                 :key="item.title"
                 :index="item.title"
-                @click="itemClick('level', item.title)"
+                @click="itemClick('brief', item.title)"
               >{{item.title}}({{item.count}})</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
-          <el-submenu index="发布部门">
+          <el-submenu index="案例级别">
+            <template slot="title">
+              <i class="el-icon-d-caret"></i>
+              <span>案例级别</span>
+            </template>
+            <el-menu-item-group>
+              <!-- 插入 -->
+              <el-menu-item
+                v-for="item in data.side.caseLevel"
+                :key="item.title"
+                :index="item.title"
+                @click="itemClick('caseLevel', item.title)"
+              >{{item.title}}({{item.count}})</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+
+          <el-submenu index="案例审理法院">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>发布部门</span>
+              <span>案例审理法院</span>
             </template>
             <el-menu-item-group>
               <!-- 插入 -->
               <el-menu-item
-                v-for="item in department"
+                v-for="item in data.side.court"
                 :key="item.title"
                 :index="item.title"
-                @click="itemClick('department', item.title)"
-              >{{item.title}}({{item.count}})</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="时效性">
-            <template slot="title">
-              <i class="el-icon-time"></i>
-              <span>时效性</span>
-            </template>
-            <el-menu-item-group>
-              <!-- 插入 -->
-              <el-menu-item
-                v-for="item in time"
-                :key="item.title"
-                :index="item.title"
-                @click="itemClick('time', item.title)"
-                v-show="item.count != 0"
-              >{{item.title}}({{item.count}})</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-submenu index="法规类别">
-            <template slot="title">
-              <i class="el-icon-menu"></i>
-              <span>法规类别</span>
-            </template>
-            <el-menu-item-group>
-              <!-- 插入 -->
-              <el-menu-item
-                v-for="item in lowSort"
-                :key="item.title"
-                :index="item.title"
-                @click="itemClick('lowSort', item.title)"
+                @click="itemClick('court', item.title)"
               >{{item.title}}({{item.count}})</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -102,70 +212,33 @@
           >清空</el-button>
         </div>
 
-        <div class="card" v-for="(item, i) in list" :key="item.id">
+        <div class="card" v-for="item in data.article" :key="item.id">
           <div class="title">
             <i class="el-icon-document"></i>
-            {{item.title}}
-          </div>
-
-          <div class="summary">
-            <strong>摘要：</strong>
-            {{item.content | getSummary()}}
+            <router-link :to="{ name: 'casedetail', params: { caseid: item.id }}">{{item.title}}</router-link>
           </div>
 
           <div class="info_box">
             <div class="info">
-              <i class="el-icon-edit"></i> 发文字号:
-              <span>{{item.number}}</span>
+              <i class="el-icon-info"></i> 案由:
+              <span>{{item.brief}}</span>
             </div>
+
             <div class="info">
-              <i class="el-icon-time"></i> 时效性:
-              <span>
-                {{
-                judgeTime(item.isInvalid, item.isInvalidPart, item.isAlter, item.carryTime)
-                }}
-              </span>
+              <i class="el-icon-d-caret"></i> 案例等级:
+              <span>{{item.caseLevel}}</span>
             </div>
+
+            <div class="info">
+              <i class="el-icon-location"></i> 案例审理法院:
+              <span>{{item.court}}</span>
+            </div>
+
             <div class="info">
               <i class="el-icon-date"></i> 发布时间:
-              <span>{{ item.carryTime|dateFormat('YYYY-MM-DD') }}</span>
+              <span>{{ item.commitTime|dateFormat('YYYY-MM-DD') }}</span>
             </div>
           </div>
-
-          <el-collapse>
-            <el-collapse-item title="查看全文" :name="i">
-              <el-card shadow="hover">
-                <el-row :gutter="20">
-                  <el-col :span="12">
-                    <div class="info">
-                      <i class="el-icon-caret-right"></i> 效力级别:
-                      <span>{{item.level}}</span>
-                    </div>
-                    <div class="info">
-                      <i class="el-icon-caret-right"></i> 发布部门:
-                      <span>{{item.department}}</span>
-                    </div>
-                    <div class="info">
-                      <i class="el-icon-caret-right"></i> 法规类别:
-                      <span>{{item.lowSort}}</span>
-                    </div>
-                  </el-col>
-
-                  <el-col :span="12">
-                    <div class="info">
-                      <i class="el-icon-caret-right"></i> 归属类别:
-                      <span>{{item.filter}}</span>
-                    </div>
-                    <div class="info">
-                      <i class="el-icon-caret-right"></i> 实施时间:
-                      <span>{{item.carryTime|dateFormat('YYYY-MM-DD')}}</span>
-                    </div>
-                  </el-col>
-                </el-row>
-              </el-card>
-              <div class="content" v-html="item.content"></div>
-            </el-collapse-item>
-          </el-collapse>
         </div>
 
         <div class="page_box">
@@ -174,7 +247,7 @@
             layout="prev, pager, next"
             :page-count="total_page"
             @current-change="pageChange"
-            :current-page="$store.state.lawSearch.page"
+            :current-page="parseInt($store.state.caseSearch.page)"
           ></el-pagination>
         </div>
       </el-main>
@@ -183,100 +256,98 @@
 </template>
 
 <script>
-import lawSearchbar from "./subComponents/law-searchbar.vue";
-
 export default {
   data() {
     return {
-      level: [],
-      department: [],
-      time: [],
-      lowSort: [],
-      list: [],
+      key: "",
+      select: "title",
+      selectSection: "案例与裁判文书",
+      form1: {
+        // 案例与裁判文书
+        procedure: "全部",
+        courtLevel: "全部",
+        instrument: "全部"
+      },
+      form2: {
+        // 公报案例
+        procedure: "全部",
+        courtLevel: "全部",
+        closingTime: "全部"
+      },
+      form3: {
+        // 案例要旨
+        procedure: "全部",
+        courtLevel: "全部",
+        instrument: "全部"
+      },
+      form4: {
+        // 案例报道
+        topic: "全部",
+        commitTime: "全部"
+      },
+      option: {
+        procedure: [],
+        courtLevel: [],
+        instrument: [],
+        closingTime: [],
+        topic: []
+      },
+      closingTime_status: {
+        disabled: true,
+        value: []
+      },
+      commitTime_status: {
+        disabled: true,
+        value: []
+      },
       nav_tag: [],
       loading: false,
-      total_page: 1
+      total_page: 1,
+      page_list: 14, // 每页展示的数据条数
+      data: {
+        side: {
+          brief: [],
+          caseLevel: [],
+          court: []
+        },
+        article: []
+      }
     };
   },
   mounted() {
+    this.getOption();
     this.getData();
   },
   methods: {
-    itemClick(part, sort) {
-      let obj = {};
-      obj[part] = sort;
-      this.$store.commit("addLawSearch", obj);
-      this.$store.commit("addLawSearch", { page: 1 });
-      this.getData();
-    },
-    all() {
-      this.$store.commit("clearLawSearchSort");
-      this.$store.commit("addLawSearch", { page: 1 });
-      this.getData();
-    },
-    judgeTime(isInvalid, isInvalidPart, isAlter, carryTime) {
-      if (isInvalid) return "失效";
-      if (isInvalidPart) return "部分失效";
-      if (isAlter) return "已被修改";
-      let time;
-      Date.parse(new Date()) < carryTime
-        ? (time = "尚未生效")
-        : (time = "现行有效");
-      return time;
-    },
-    getData() {
+    getData(retention) {
       this.loading = true;
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
+      if (!retention) {
+        this.$store.commit("addCaseSearch", { page: "1" });
+      }
       this.axios
-        .post("/searchLaw", this.$store.state.lawSearch)
+        .post("/searchCase", this.$store.state.caseSearch)
         .then(res => {
           if (res.data.code == 1) {
-            this.list = res.data.data.list;
-            this.level = res.data.data.bar.level;
-            this.department = res.data.data.bar.department;
-            this.time = res.data.data.bar.time;
-            this.lowSort = res.data.data.bar.lowSort;
-            this.total_page =
-              parseInt(res.data.data.total / res.data.data.list.length) + 1;
+            this.data = res.data.data;
+            let total = this.data.total;
+            let list = this.page_list;
+            if (total < list) {
+              this.total_page = 1;
+            } else {
+              total % list == 0
+                ? (this.total_page = total / list)
+                : (this.total_page = parseInt(total / list) + 1);
+            }
             // 渲染导航标签
             this.nav_tag = [];
-            let lawSearch = this.$store.state.lawSearch;
-            for (let key in lawSearch) {
-              switch (key) {
-                case "page":
-                  break;
-                case "search":
-                  break;
-                case "time":
-                  switch (lawSearch.time) {
-                    case 1:
-                      this.nav_tag.push("现行有效");
-                      break;
-                    case 2:
-                      this.nav_tag.push("尚未生效");
-                      break;
-                    case 3:
-                      this.nav_tag.push("失效");
-                      break;
-                    case 4:
-                      this.nav_tag.push("部分失效");
-                      break;
-                    case 5:
-                      this.nav_tag.push("已被修改");
-                      break;
-                  }
-                  break;
-                case "key":
-                  if (lawSearch.key == "") {
-                    this.nav_tag.push("无关键词");
-                  } else {
-                    this.nav_tag.push(lawSearch[key]);
-                  }
-                  break;
-                default:
-                  this.nav_tag.push(lawSearch[key]);
-              }
+            let caseSearch = this.$store.state.caseSearch.sort;
+            for (let key in caseSearch) {
+              this.nav_tag.push(caseSearch[key]);
+            }
+            if (this.key != "") {
+              this.nav_tag.push("关键词：" + this.key);
             }
             this.loading = false;
           } else {
@@ -289,47 +360,158 @@ export default {
           this.$message("未知错误，无法获取内容，请重试！");
         });
     },
-    tagClose(tag) {
-      // 从数据层删除
-      this.nav_tag.splice(this.nav_tag.indexOf(tag), 1);
-      let lawSearch = this.$store.state.lawSearch;
-      // 删除store层中删除
-      for (let key in lawSearch) {
-        // 遍历store中lawSearch的值部分与tag进行对比，如果对比上，就删除
-        if (
-          tag == "现行有效" ||
-          tag == "尚未生效" ||
-          tag == "失效" ||
-          tag == "部分失效" ||
-          tag == "已被修改"
-        ) {
-          this.$store.commit("deleteLawSearch", "time");
-        } else if (tag == "无关键词") {
-          this.$store.commit("deleteLawSearch", "search");
-          this.$store.commit("deleteLawSearch", "key");
-        } else if (lawSearch[key] == tag) {
-          this.$store.commit("deleteLawSearch", key);
-          if (key == "key") {
-            this.$store.commit("deleteLawSearch", "search");
+    search() {
+      if (this.key == "") {
+        this.$message("请输入内容");
+        return;
+      } else {
+        let obj = {
+          key: this.key,
+          search: this.select
+        };
+        this.$store.commit("addCaseSearch", obj);
+        this.getData();
+      }
+    },
+    itemClick(part, sort) {
+      this.$store.commit("addCaseSearchSort", { [part]: sort });
+      this.getData();
+    },
+    changeSection(tab) {
+      for (let key in this.form1) {
+        this.form1[key] = "全部";
+      }
+      for (let key in this.form2) {
+        this.form2[key] = "全部";
+      }
+      for (let key in this.form3) {
+        this.form3[key] = "全部";
+      }
+      for (let key in this.form4) {
+        this.form4[key] = "全部";
+      }
+      this.$store.commit("changeSection", tab.name);
+      this.getData();
+    },
+    all() {
+      this.$store.commit("clearCaseSearchSort");
+      this.getData();
+    },
+    getOption() {
+      for (let key in this.option) {
+        this.axios
+          .get("/getCaseSort?sort=" + key)
+          .then(res => {
+            if (res.data.code == 1) {
+              this.option[key] = res.data.data.value;
+            } else {
+              this.$message("选项获取失败，请稍候重试");
+            }
+          })
+          .catch(() => {
+            this.$message("选项获取失败，请稍候重试");
+          });
+      }
+    },
+    submitForm(form) {
+      this.$store.commit("clearCaseSearchTag");
+      let form_data = this[form];
+      for (let key in form_data) {
+        if (form_data[key] != "全部") {
+          switch (key) {
+            case "closingTime":
+              if (form_data[key] == "其他") {
+                if (this.closingTime_status.value.length != 0) {
+                  this.$store.commit("addCaseSearchTag", {
+                    closingTime: this.getRange("closingTime_status")
+                  });
+                } else {
+                  this.$message("请选择审结日期！");
+                  return;
+                }
+              } else {
+                this.$store.commit("addCaseSearchTag", {
+                  [key]: form_data[key]
+                });
+              }
+              break;
+            case "commitTime":
+              if (form_data[key] == "其他") {
+                if (this.commitTime_status.value.length != 0) {
+                  this.$store.commit("addCaseSearchTag", {
+                    commitTime: this.getRange("commitTime_status")
+                  });
+                } else {
+                  this.$message("请选择发布日期！");
+                  return;
+                }
+              } else {
+                this.$store.commit("addCaseSearchTag", {
+                  [key]: form_data[key]
+                });
+              }
+              break;
+            default:
+              this.$store.commit("addCaseSearchTag", { [key]: form_data[key] });
+              break;
           }
         }
       }
-      this.$store.commit("addLawSearch", { page: 1 });
+      this.getData();
+    },
+    getRange(timmer) {
+      let start = this[timmer].value[0].toString();
+      let end = this[timmer].value[1].toString();
+      let range = start + "-" + end;
+      return range;
+    },
+    tagClose(tag) {
+      // 从数据层删除
+      this.nav_tag.splice(this.nav_tag.indexOf(tag), 1);
+      let caseSearch = this.$store.state.caseSearch.sort;
+      for (let key in caseSearch) {
+        if (caseSearch[key] == tag) {
+          this.$store.commit("deleteCaseSearch", key);
+        }
+      }
+      if (tag.slice(0, 3) == "关键词") {
+        this.$store.commit("deleteCaseSearch", "key");
+        this.$store.commit("deleteCaseSearch", "search");
+      }
       this.getData();
     },
     clearTag() {
       this.nav_tag = [];
-      this.$store.commit("clearAllSearch");
-      this.$store.commit("addLawSearch", { page: 1 });
+      this.$store.commit("clearCaseSearchSort");
+      this.$store.commit("deleteCaseSearch", "key");
+      this.$store.commit("deleteCaseSearch", "search");
+      this.key = "";
       this.getData();
     },
     pageChange(page) {
-      this.$store.commit("addLawSearch", { page: page });
+      this.$store.commit("addCaseSearch", { page: page });
+      let retention = true;
+      this.getData(retention);
       this.getData();
     }
   },
-  components: {
-    "law-searchbar": lawSearchbar
+  watch: {
+    "form2.closingTime": function(val) {
+      if (val == "其他") {
+        this.closingTime_status.disabled = false;
+      } else {
+        this.closingTime_status.disabled = true;
+        this.closingTime_status.value = "";
+      }
+    },
+    "form4.commitTime": function(val) {
+      if (val == "其他") {
+        this.commitTime_status.disabled = false;
+      } else {
+        this.commitTime_status.disabled = true;
+        this.commitTime_status.value = "";
+      }
+    }
   }
 };
 </script> 
@@ -342,6 +524,11 @@ export default {
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
   border-radius: 5px;
+  .search_box {
+    .el-select {
+      width: 160px;
+    }
+  }
 }
 .el-aside {
   .el-menu {
@@ -383,6 +570,10 @@ export default {
       margin-bottom: 5px;
       font-size: 20px;
       font-weight: 600;
+      a {
+        color: rgba(0, 0, 0, 0.8);
+        text-decoration: none;
+      }
     }
     .summary {
       margin-top: 1rem;
@@ -395,6 +586,7 @@ export default {
       display: flex;
       line-height: 1.5;
       margin: 1rem 0;
+      margin-bottom: 0;
       .info {
         font-size: 14px;
         margin-right: 2rem !important;
@@ -426,19 +618,30 @@ export default {
 </style>
 
 <style lang="scss">
-.el-collapse-item__header {
-  display: flex;
-  justify-content: center;
-  color: #409eff !important;
-  font-size: 14px !important;
-  i {
-    margin: 0;
-    color: #409eff;
-    font-weight: bold;
+#case {
+  .el-collapse-item__header {
+    display: flex;
+    justify-content: center;
+    color: #409eff !important;
+    font-size: 14px !important;
+    i {
+      margin: 0;
+      color: #409eff;
+      font-weight: bold;
+    }
   }
-}
-.el-menu-item-group__title {
-  display: none !important;
+  .el-menu-item-group__title {
+    display: none !important;
+  }
+
+  .el-tabs {
+    margin-top: 20px;
+    padding: 0 10px;
+    button {
+      margin-top: -20px;
+      float: right;
+    }
+  }
 }
 </style>
 

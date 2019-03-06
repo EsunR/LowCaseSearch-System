@@ -1,12 +1,12 @@
 <template>
-  <div id="commit_law">
+  <div id="commit_law" v-loading.fullscreen.lock="loading" element-loading-text="加载数据中">
     <el-form
       :model="ruleForm"
       :rules="rule"
       ref="ruleForm"
       label-width="120px"
       label-position="right"
-      v-if="identity == 'teacher'"
+      v-show="identity == 'teacher'"
     >
       <el-form-item label="所属板块" prop="section">
         <el-select v-model="ruleForm.section" placeholder="请选择">
@@ -112,7 +112,7 @@
         </router-link>
       </div>
     </el-form>
-    <h1 v-if="identity != 'teacher'">您无权访问该内容</h1>
+    <h5 v-show="identity != 'teacher'">您的身份不符</h5>
   </div>
 </template>
 
@@ -174,24 +174,11 @@ export default {
         closingTime: true,
         topic: true
       },
-      identity: ""
+      identity: "",
+      loading: true
     };
   },
   mounted() {
-    // 生成富文本编辑器
-    editor.customConfig.menus = [
-      "head",
-      "bold",
-      "italic",
-      "underline",
-      "strikeThrough",
-      "foreColor",
-      "backColor",
-      "link",
-      "list",
-      "justify"
-    ];
-    editor.create();
     // 动态生成下拉菜单
     this.getOption();
     this.checkIdentity();
@@ -202,6 +189,7 @@ export default {
         this.axios
           .get("/getCaseSort?sort=" + key)
           .then(res => {
+            this.loading = false;
             if (res.data.code == 1) {
               this.option[key] = res.data.data.value;
             } else {
@@ -244,7 +232,6 @@ export default {
               content: this.content,
               commitTime: (Date.parse(new Date()) / 1000).toString()
             };
-            console.log(obj);
             this.$confirm("您确定要上传该司法案例吗?", "提示", {
               confirmButtonText: "确定",
               cancelButtonText: "取消",
@@ -309,8 +296,23 @@ export default {
         .get("/getUserInfo")
         .then(res => {
           if (res.data.code == 1) {
-            console.log(res.data.data.identity);
             this.identity = res.data.data.identity;
+            if (this.identity == "teacher") {
+              // 生成富文本编辑器
+              editor.customConfig.menus = [
+                "head",
+                "bold",
+                "italic",
+                "underline",
+                "strikeThrough",
+                "foreColor",
+                "backColor",
+                "link",
+                "list",
+                "justify"
+              ];
+              editor.create();
+            }
           }
         })
         .catch(err => {
@@ -378,6 +380,7 @@ export default {
           this.rule.topic = [
             { required: true, message: "请选择相应选项", trigger: "blur" }
           ];
+          break;
         default:
           console.log("default");
           break;
@@ -394,6 +397,7 @@ export default {
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  margin-bottom: 40px;
   .el-form {
     .editor_title {
       font-size: 14px;
