@@ -49,7 +49,7 @@
 
         <div class="info" v-if="parseInt(data.closingTime) > 1000000000000">
           <i class="el-icon-caret-right"></i> 审结时间:
-          <span>{{data.closingTime}}</span>
+          <span>{{data.closingTime | dateFormat('YYYY-MM-DD')}}</span>
         </div>
       </el-card>
       <div class="content" v-html="data.content"></div>
@@ -121,6 +121,9 @@ export default {
       font-size: 16px;
       line-height: 1.7;
       text-indent: 2em;
+      padding: 0 20px;
+      text-align: justify;
+      color: rgba(0, 0, 0, 0.8);
     }
   }
 }

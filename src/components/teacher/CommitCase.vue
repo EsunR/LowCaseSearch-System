@@ -179,6 +179,23 @@ export default {
     };
   },
   mounted() {
+    this.axios
+      .get("/getUserInfo")
+      .then(res => {
+        if (res.data.code == 1) {
+          if (res.data.data.identity != "teacher") {
+            this.$router.push("/");
+            this.$message("身份验证失败，您不能进入该页面");
+          }
+        } else {
+          this.$router.push("/");
+          this.$message("身份验证失败，您不能进入该页面");
+        }
+      })
+      .catch(() => {
+        this.$router.push("/");
+        this.$message("身份验证失败，您不能进入该页面");
+      });
     // 动态生成下拉菜单
     this.getOption();
     this.checkIdentity();
@@ -230,11 +247,11 @@ export default {
                 topic: data.topic
               },
               content: this.content,
-              commitTime: (Date.parse(new Date())).toString()
+              commitTime: Date.parse(new Date()).toString()
             };
-            if (obj.tag.closingTime == "NaN"){
-              obj.tag.closingTime = ""
-            } 
+            if (obj.tag.closingTime == "NaN") {
+              obj.tag.closingTime = "";
+            }
             this.$confirm("您确定要上传该司法案例吗?", "提示", {
               confirmButtonText: "确定",
               cancelButtonText: "取消",

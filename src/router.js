@@ -8,9 +8,8 @@ import AlterPwd from './components/AlterPwd.vue'
 import Feedback from './components/Feedback.vue'
 import CommitCase from './components/teacher/CommitCase.vue'
 import CaseDetail from './components/CaseDetail.vue'
-
-
-
+import ViewCommitCase from './components/teacher/ViewCommitCase.vue'
+import AlterCase from './components/teacher/AlterCase.vue'
 
 
 
@@ -31,7 +30,9 @@ var router = new Router({
     { path: '/alterpwd', name: 'alterpwd', component: AlterPwd },
     { path: '/commitcase', name: 'commitcase', component: CommitCase },
     { path: '/feedback', name: 'feedback', component: Feedback },
-    { path: '/casedetail/:caseid', name:'casedetail', component:  CaseDetail}
+    { path: '/casedetail/:caseid', name:'casedetail', component:  CaseDetail},
+    { path: '/viewcommitcase', name:'viewcommitcase', component:  ViewCommitCase},
+    { path: '/altercase/:caseid', name:'altercase', component:  AlterCase},
   ]
 })
 

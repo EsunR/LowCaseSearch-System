@@ -11,6 +11,7 @@
             <el-tab-pane label="法律法规" name="law"></el-tab-pane>
             <el-tab-pane label="司法案例" name="case"></el-tab-pane>
             <el-tab-pane v-if="identity == 'teacher'" label="司法案例上传" name="commitcase"></el-tab-pane>
+            <el-tab-pane v-if="identity == 'teacher'" label="查看已上传内容" name="viewcommitcase"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -39,7 +40,7 @@ export default {
   },
   mounted() {
     this.chagePaht();
-    this.checkIdentity()
+    this.checkIdentity();
   },
   methods: {
     handleClick(tab) {
@@ -55,6 +56,9 @@ export default {
           break;
         case "commitcase":
           this.$router.push("/commitcase");
+          break;
+        case "viewcommitcase":
+          this.$router.push("/viewcommitcase");
           break;
       }
     },
@@ -73,20 +77,27 @@ export default {
           this.flag = true;
           this.activeTab = "commitcase";
           break;
+        case "/viewcommitcase":
+          this.flag = true;
+          this.activeTab = "viewcommitcase";
+          break;
         default:
           this.flag = false;
           break;
       }
     },
     checkIdentity() {
-      this.axios.get("/getUserInfo").then(res=>{
-        if(res.data.code == 1){
-          this.identity = res.data.data.identity;
-        }
-      }).catch((err)=>{
-        console.log(err);
-        this.$message("读取服务器信息失败，请重新刷新页面")
-      })
+      this.axios
+        .get("/getUserInfo")
+        .then(res => {
+          if (res.data.code == 1) {
+            this.identity = res.data.data.identity;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          this.$message("读取服务器信息失败，请重新刷新页面");
+        });
     }
   },
   watch: {
