@@ -10,6 +10,8 @@ import CommitCase from './components/teacher/CommitCase.vue'
 import CaseDetail from './components/CaseDetail.vue'
 import ViewCommitCase from './components/teacher/ViewCommitCase.vue'
 import AlterCase from './components/teacher/AlterCase.vue'
+import SearchUser from './components/admin/SearchUser.vue'
+
 
 
 
@@ -33,6 +35,7 @@ var router = new Router({
     { path: '/casedetail/:caseid', name:'casedetail', component:  CaseDetail},
     { path: '/viewcommitcase', name:'viewcommitcase', component:  ViewCommitCase},
     { path: '/altercase/:caseid', name:'altercase', component:  AlterCase},
+    { path: '/searchuser', name:'searchuser', component:  SearchUser},
   ]
 })
 

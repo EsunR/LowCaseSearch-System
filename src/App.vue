@@ -12,6 +12,7 @@
             <el-tab-pane label="司法案例" name="case"></el-tab-pane>
             <el-tab-pane v-if="identity == 'teacher'" label="司法案例上传" name="commitcase"></el-tab-pane>
             <el-tab-pane v-if="identity == 'teacher'" label="查看已上传内容" name="viewcommitcase"></el-tab-pane>
+            <el-tab-pane v-if="identity == 'admin'" label="搜索用户" name="searchuser"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -60,6 +61,9 @@ export default {
         case "viewcommitcase":
           this.$router.push("/viewcommitcase");
           break;
+        case "searchuser":
+          this.$router.push("/searchuser");
+          break;
       }
     },
     chagePaht() {
@@ -80,6 +84,10 @@ export default {
         case "/viewcommitcase":
           this.flag = true;
           this.activeTab = "viewcommitcase";
+          break;
+        case "/searchuser":
+          this.flag = true;
+          this.activeTab = "searchuser";
           break;
         default:
           this.flag = false;
