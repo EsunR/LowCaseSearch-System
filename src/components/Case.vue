@@ -261,7 +261,7 @@ export default {
     return {
       key: "",
       select: "title",
-      selectSection: "案例与裁判文书",
+      selectSection: this.$store.state.caseSearch.section,
       form1: {
         // 案例与裁判文书
         procedure: "全部",
@@ -570,9 +570,12 @@ export default {
       margin-bottom: 5px;
       font-size: 20px;
       font-weight: 600;
-      a {
-        color: rgba(0, 0, 0, 0.8);
+      a{
         text-decoration: none;
+        color: rgba(0, 0, 0, 0.8);
+        &:hover{
+          color: #409eff;
+        }
       }
     }
     .summary {

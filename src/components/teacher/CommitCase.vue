@@ -232,6 +232,9 @@ export default {
               content: this.content,
               commitTime: (Date.parse(new Date())).toString()
             };
+            if (obj.tag.closingTime == "NaN"){
+              obj.tag.closingTime = ""
+            } 
             this.$confirm("您确定要上传该司法案例吗?", "提示", {
               confirmButtonText: "确定",
               cancelButtonText: "取消",
