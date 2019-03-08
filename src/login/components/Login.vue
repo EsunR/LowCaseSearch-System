@@ -118,7 +118,7 @@ export default {
                 localStorage.setItem("token", res.data.data.token);
                 window.location.href = '/';
               } else {
-                this.$refs.password.error = "密码错误";
+                this.$refs.password.error = "请检查密码、帐号以及登录身份";
               }
             })
             .catch((err) => {

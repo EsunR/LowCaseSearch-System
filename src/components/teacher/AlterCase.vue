@@ -233,7 +233,7 @@ export default {
         this.$message("请输入文本内容！");
         return;
       }
-      this.$confirm("您确定要删除该司法案例吗?", "提示", {
+      this.$confirm("您确定要提交修改吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

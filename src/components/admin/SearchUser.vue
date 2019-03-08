@@ -1,17 +1,27 @@
 <template>
-  <div id="searchuser" class="main_card">
+  <div
+    id="searchuser"
+    v-loading.fullscreen.lock="loading"
+    element-loading-text="加载数据中"
+    class="main_card"
+  >
     <div class="search_box">
       <el-input placeholder="请输入内容" v-model="key">
         <el-select v-model="searchWay" slot="prepend" placeholder="请选择">
-          <el-option label="搜索学生" value="student"></el-option>
-          <el-option label="搜索教师" value="teacher"></el-option>
+          <el-option label="按名字搜索" value="name"></el-option>
+          <el-option label="按学号/职工号搜索" value="account"></el-option>
         </el-select>
         <el-button slot="append" icon="el-icon-search" @click="getSearch">搜索</el-button>
       </el-input>
+      <div class="radio_box">
+        <el-radio v-model="searchIdentity" label="student">搜索学生</el-radio>
+        <el-radio v-model="searchIdentity" label="teacher">搜索教师</el-radio>
+      </div>
     </div>
+
     <div class="user_card" v-for="item in data" :key="item.uid">
       <div class="identity">
-        <span>{{item.identity}}</span>
+        <span>{{item.identity | identity}}</span>
       </div>
 
       <el-row>
@@ -55,32 +65,55 @@
 export default {
   data() {
     return {
-      searchWay: "student",
+      loading: false,
+      searchWay: "name",
+      searchIdentity: "student",
       key: "",
-      data: [
-        {
-          uid: "1",
-          name: "王大锤",
-          identity: "teacher",
-          account: "16031210105",
-          email: "641411169@qq.com",
-          phone: "15670023772",
-          loginCount: "12", // 登录次数
-          feedback: [
-            {
-              msg: "这个项目太棒了吧!"
-            },
-            {
-              msg: "this project is so cooooooool!"
-            }
-          ]
-        }
-      ]
+      data: []
     };
   },
   methods: {
     getSearch() {
-      console.log(1);
+      if (this.key == "") {
+        this.$message("搜索内容不能为空");
+        return;
+      }
+      this.loading = true;
+      this.axios
+        .post("/searchUser", {
+          searchIdentity: this.searchIdentity,
+          searchWay: this.searchWay,
+          key: this.key
+        })
+        .then(res => {
+          if (res.data.code == 1) {
+            this.data = res.data.data;
+            this.loading = false;
+            if (res.data.data.length == 0) {
+              this.$message("查无此人");
+              this.loading = false;
+            }
+          } else {
+            this.$message("搜索失败，查无此人");
+            this.loading = false;
+          }
+        })
+        .catch(() => {
+          this.$message("与服务器连接失败，请稍候重试");
+          this.loading = false;
+        });
+    }
+  },
+  filters: {
+    identity(value) {
+      switch (value) {
+        case "teacher":
+          return "教师";
+        case "student":
+          return "学生";
+        case "admin":
+          return "管理员";
+      }
     }
   }
 };
@@ -88,10 +121,16 @@ export default {
 
 <style lang="scss" scoped>
 #searchuser {
+  margin-bottom: 40px;
   margin-top: 0;
   .search_box {
     .el-select {
-      width: 110px;
+      width: 170px;
+    }
+    .radio_box {
+      margin: 0 auto;
+      margin-top: 20px;
+      width: 190px;
     }
   }
   .user_card {
@@ -127,10 +166,10 @@ export default {
     }
     .feedback {
       border-radius: 5px;
-      background-color: #ebeef5;
       padding: 10px 15px;
       line-height: 1.7;
       margin-bottom: 10px;
+      background-color: rgba(0, 0, 0, 0.05);
     }
   }
 }
