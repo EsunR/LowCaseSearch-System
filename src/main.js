@@ -6,10 +6,12 @@ import './plugins/element.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import moment from 'moment'
+import global from './common.vue'
+
+Vue.prototype.COMMON = global
 
 Vue.use(VueAxios, axios);
-axios.defaults.baseURL = 'http://47.95.196.58:8080/api/law/';
-// axios.defaults.baseURL = 'http://47.103.2.177:8080/api/law';
+axios.defaults.baseURL = global.host;
 
 
 axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');

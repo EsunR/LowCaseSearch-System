@@ -84,7 +84,7 @@ export default {
               if (res.data.code == 1) {
                 this.$message("修改成功，正在注销");
                 setTimeout(() => {
-                  window.location.href = "/login.html";
+                  window.location.href = this.COMMON.login_location;
                 }, 2000);
               } else {
                 this.$message(res.data.msg);

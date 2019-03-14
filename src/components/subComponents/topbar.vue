@@ -65,18 +65,18 @@ export default {
           this.name = this.$store.state.name;
           this.loginCount = this.$store.state.loginCount;
         } else {
-          window.location.href = "/login.html";
+          window.location.href = this.COMMON.login_location;
         }
       })
       .catch(() => {
-        window.location.href = "/login.html";
+        window.location.href = this.COMMON.login_location;
       });
   },
   methods: {
     selectDropdwon(command) {
       switch (command) {
         case "用户注销":
-          window.location.href = "/login.html";
+          window.location.href = this.COMMON.login_location;
           break;
         case "查看信息":
           this.$router.push("/userinfo");

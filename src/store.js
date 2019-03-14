@@ -48,7 +48,7 @@ export default new Vuex.Store({
           break;
         default:
           state.identity = "未知";
-          window.location.href = "/login.html";
+          window.location.href = this.COMMON.login_location;
       }
     },
 
