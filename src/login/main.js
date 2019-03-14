@@ -5,13 +5,15 @@ import './plugins/element.js'
 import './lib/login.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import global from '../common.vue'
+
+Vue.prototype.COMMON = global
 
 
 
 Vue.use(VueAxios, axios);
 
-axios.defaults.baseURL = 'http://47.95.196.58:8080/api/law/';
-// axios.defaults.baseURL = 'http://47.103.2.177:8080/api/law';
+axios.defaults.baseURL = global.host;
 
 
 new Vue({
