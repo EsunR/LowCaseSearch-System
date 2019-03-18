@@ -1,7 +1,7 @@
 <template>
   <div id="getFeedback">
     <div class="feedback_card" v-for="item in data" :key="item.id">
-      <div class="feedbackMsg">反馈信息：{{item.feedbackMsg}}</div>
+      <div class="feedbackMsg">反馈信息：{{item.content}}</div>
       <hr>
       <div class="account">来自账号：{{item.account}}</div>
     </div>
@@ -12,22 +12,10 @@
 export default {
   data() {
     return {
-      data: [
-        {
-          id: 1,
-          feedbackMsg: "反馈信息",
-          account: "16031210105"
-        },
-        {
-          id: 2,
-          feedbackMsg: "反馈信息",
-          account: "16031210105"
-        }
-      ]
+      data: []
     };
   },
   methods: {
-    // TODO: 获取反馈
     getData() {
       this.axios
         .get("/getFeedback")

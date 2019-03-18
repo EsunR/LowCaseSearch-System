@@ -106,7 +106,6 @@ export default {
           this.loading = false;
         });
     },
-    // TODO: 删除用户
     deleteUser(id) {
       this.$confirm("您确定要删除该用户吗?", "提示", {
         confirmButtonText: "确定",
