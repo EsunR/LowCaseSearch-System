@@ -53,10 +53,13 @@
           </div>
         </el-col>
       </el-row>
-      <div class="subtitle">
-        <span>反馈记录</span>
-      </div>
-      <div class="feedback" v-for="sub in item.feedback" :key="sub.msg">{{sub.msg}}</div>
+      <el-row>
+        <el-button
+          type="danger"
+          style="float: right; margin-top: 20px;"
+          @click="deleteUser(item.uid)"
+        >删除该用户</el-button>
+      </el-row>
     </div>
   </div>
 </template>
@@ -101,6 +104,37 @@ export default {
         .catch(() => {
           this.$message("与服务器连接失败，请稍候重试");
           this.loading = false;
+        });
+    },
+    // TODO: 删除用户
+    deleteUser(id) {
+      this.$confirm("您确定要删除该用户吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.axios
+            .get("/deleteUser?id=" + id)
+            .then(res => {
+              if (res.data.code == 1) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.data = [];
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message("服务器无法连接");
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "操作已取消"
+          });
         });
     }
   },

@@ -82,10 +82,10 @@ export default {
             .post("/commitAlterPwd", { oldPwd, newPwd })
             .then(res => {
               if (res.data.code == 1) {
-                this.$message("修改成功，正在注销");
+                this.$message("修改成功，正在返回主页");
                 setTimeout(() => {
-                  window.location.href = this.COMMON.login_location;
-                }, 2000);
+                  this.$router.push('/');
+                }, 1000);
               } else {
                 this.$message(res.data.msg);
                 this.resetForm("ruleForm2");

@@ -102,6 +102,7 @@
           >清空</el-button>
         </div>
 
+        <div class="card" v-if="list.length == 0">没有找到相关信息</div>
         <div class="card" v-for="(item, i) in list" :key="item.id">
           <div class="title">
             <i class="el-icon-document"></i>

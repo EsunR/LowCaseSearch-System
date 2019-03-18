@@ -34,7 +34,7 @@
               <el-dropdown-item command="修改密码">修改密码</el-dropdown-item>
               <el-dropdown-item command="用户反馈">用户反馈</el-dropdown-item>
               <el-dropdown-item command="用户注销" style="text-align: center; color: #F56C6C" divided>
-                <i class="el-icon-error" style="margin-right: 5px;"></i>注销
+                <i class="el-icon-error" style="margin-right: 5px;"></i>退出
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

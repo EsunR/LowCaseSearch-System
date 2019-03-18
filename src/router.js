@@ -11,6 +11,7 @@ import CaseDetail from './components/CaseDetail.vue'
 import ViewCommitCase from './components/teacher/ViewCommitCase.vue'
 import AlterCase from './components/teacher/AlterCase.vue'
 import SearchUser from './components/admin/SearchUser.vue'
+import GetFeedback from './components/admin/GetFeedback.vue'
 
 
 
@@ -36,6 +37,7 @@ var router = new Router({
     { path: '/viewcommitcase', name:'viewcommitcase', component:  ViewCommitCase},
     { path: '/altercase/:caseid', name:'altercase', component:  AlterCase},
     { path: '/searchuser', name:'searchuser', component:  SearchUser},
+    { path: '/getfeedback', name:'getfeedback', component:  GetFeedback}
   ]
 })
 

@@ -13,6 +13,7 @@
             <el-tab-pane v-if="identity == 'teacher'" label="司法案例上传" name="commitcase"></el-tab-pane>
             <el-tab-pane v-if="identity == 'teacher'" label="查看已上传内容" name="viewcommitcase"></el-tab-pane>
             <el-tab-pane v-if="identity == 'admin'" label="搜索用户" name="searchuser"></el-tab-pane>
+            <el-tab-pane v-if="identity == 'admin'" label="查看反馈" name="getfeedback"></el-tab-pane>
           </el-tabs>
         </el-header>
         <el-container>
@@ -64,6 +65,9 @@ export default {
         case "searchuser":
           this.$router.push("/searchuser");
           break;
+        case "getfeedback":
+          this.$router.push("/getfeedback");
+          break;
       }
     },
     chagePaht() {
@@ -88,6 +92,10 @@ export default {
         case "/searchuser":
           this.flag = true;
           this.activeTab = "searchuser";
+          break;
+        case "/getfeedback":
+          this.flag = true;
+          this.activeTab = "getfeedback";
           break;
         default:
           this.flag = false;
