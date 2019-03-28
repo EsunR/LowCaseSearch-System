@@ -116,7 +116,7 @@ export default {
             .then(res => {
               if (res.data.code == true) {
                 localStorage.setItem("token", res.data.data.token);
-                window.location.href = '/index.html';
+                window.location.href = this.COMMON.index_location;
               } else {
                 this.$refs.password.error = "请检查密码、帐号以及登录身份";
               }

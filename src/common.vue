@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
-const host = "http://localhost:8080/api/law";
+const host = "http://47.95.196.58:8092/api/law/";
 
-const login_location = "/login.html"
-const index_location = "/index.html"
+const login_location = "./login.html"
+const index_location = "./index.html"
 
 export default {
   login_location,

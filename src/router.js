@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import global from './common.vue'
 import Law from './components/Law.vue'
 import Case from './components/Case.vue'
 import UserInfo from './components/UserInfo.vue'
@@ -33,11 +34,11 @@ var router = new Router({
     { path: '/alterpwd', name: 'alterpwd', component: AlterPwd },
     { path: '/commitcase', name: 'commitcase', component: CommitCase },
     { path: '/feedback', name: 'feedback', component: Feedback },
-    { path: '/casedetail/:caseid', name:'casedetail', component:  CaseDetail},
-    { path: '/viewcommitcase', name:'viewcommitcase', component:  ViewCommitCase},
-    { path: '/altercase/:caseid', name:'altercase', component:  AlterCase},
-    { path: '/searchuser', name:'searchuser', component:  SearchUser},
-    { path: '/getfeedback', name:'getfeedback', component:  GetFeedback}
+    { path: '/casedetail/:caseid', name: 'casedetail', component: CaseDetail },
+    { path: '/viewcommitcase', name: 'viewcommitcase', component: ViewCommitCase },
+    { path: '/altercase/:caseid', name: 'altercase', component: AlterCase },
+    { path: '/searchuser', name: 'searchuser', component: SearchUser },
+    { path: '/getfeedback', name: 'getfeedback', component: GetFeedback }
   ]
 })
 
@@ -45,7 +46,7 @@ router.beforeEach((to, from, next) => {
   if (localStorage.getItem('token')) {
     next();
   } else {
-    window.location.href = '/login.html'
+    window.location.href = global.login_location
     next();
   }
 })
